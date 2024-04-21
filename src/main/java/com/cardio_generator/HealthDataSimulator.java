@@ -23,7 +23,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 /**
+ *
  * Simulates health data for multiple patients and outputs it using various output strategies.
+ * This class is responsible for putting together  all the generators of data for patients and scheduling the tasks for each patient
  */
 public class HealthDataSimulator {
 
@@ -33,9 +35,9 @@ public class HealthDataSimulator {
     private static final Random random = new Random();
 
     /**
-     * Main method to start the  simulation.
+     * Main method to start the  simulation it creates a new scheduler, list of patient ids and schedules the task of the ids generated  with the number of patients being simulated.
      *
-     * @param args Command line arguments for setting up the simulation.
+     * @param args Command line arguments for setting up the Health data simulation.
      * @throws IOException If an I/O error occurs.
      */
 
@@ -119,7 +121,9 @@ public class HealthDataSimulator {
     }
 
     /**
-     * Prints help message on how to use the program.
+     * Method that prints help message on how to use the program.
+     * This messague provides information on available command line options
+     * It also provides information on the syntax to be used in the command line this way users are able to use the Health Data Generator program.
      */
 
     private static void printHelp() {
@@ -141,9 +145,10 @@ public class HealthDataSimulator {
 
     /**
      * Initializes the patient IDs.
+     * This method creates the patients ID's that are to be simulated throughout the program.
      *
-     * @param patientCount The number of patients.
-     * @return The list of initialized patient IDs.
+     * @param patientCount The number of patients the user wants to generate.
+     * @return The list of the created patient IDs.
      */
     private static List<Integer> initializePatientIds(int patientCount) {
         List<Integer> patientIds = new ArrayList<>();
@@ -155,7 +160,8 @@ public class HealthDataSimulator {
 
     /**
      * Schedules the tasks for each patient.
-     *
+     * It creates a data generator for each data to be simulated with the number of patients the user wants to generate.
+     * With the list of all the generated Ids it generates tasks for the patients to follow according to the data generated with the generators.
      * @param patientIds The list of patient IDs.
      */
     private static void scheduleTasksForPatients(List<Integer> patientIds) {
