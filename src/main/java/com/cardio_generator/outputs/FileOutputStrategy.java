@@ -8,6 +8,12 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * This class pourpuse is to create a file output strategy for the health data generated.
+ * It implements the Output Strategy Interface that provides a mechanism of outputting information.
+ * Once this class is initiated it requires a base directory to store the files.
+ * This class generates a text file with the information generated of each health data entry with the information of the patient ID, timestamp, label, and data.
+ */
 //used the camelCase naming convention in all variables
 public class FileOutputStrategy implements OutputStrategy {
 
@@ -16,10 +22,24 @@ public class FileOutputStrategy implements OutputStrategy {
     public final ConcurrentHashMap<String, String> fileMap = new ConcurrentHashMap<>(); // Renamed variable to camelCsse
 
     // Added final keyword to parameter and renamed parameter to camelCase
+
+    /**
+     * Constructs a new FileOutputStrategy instance with the specified base directory.
+     *
+     * @param baseDirectory The base directory where output files will be stored.
+     */
     public FileOutputStrategy(final String baseDirectory) {
         this.baseDirectory = baseDirectory;
     }
 
+    /**
+     * Outputs health data entry by creating a text file based on the specified parameters.
+     *
+     * @param patientId The ID of the patient that was generated.
+     * @param timestamp The timestamp of the health data.
+     * @param label     The label of the health data generated.
+     * @param data      The health data to be written in the file outputted.
+     */
     @Override
     public void output(final int patientId, final long timestamp, final String label, final String data) {
         try {
