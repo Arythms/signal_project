@@ -66,3 +66,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
  ## Project Members
  Student ID: i6361091
+
+ ## UML Models
+UML models for the project can be found here: https://github.com/Arythms/signal_project/tree/f85a7d7cefa265359650302bf769c73477f236bb/uml_models
