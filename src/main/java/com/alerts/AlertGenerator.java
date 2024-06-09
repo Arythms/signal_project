@@ -1,7 +1,13 @@
 package com.alerts;
 
-import com.data_management.DataStorage;
-import com.data_management.Patient;
+import com.data_management.*;
+import com.data_management.trackers.BloodPressureTracker;
+import com.data_management.trackers.BloodSaturationTracker;
+import com.data_management.trackers.ECGTracker;
+import com.data_management.trackers.HypotensiveHypoxemiaTracker;
+
+
+import java.util.List;
 
 /**
  * The {@code AlertGenerator} class is responsible for monitoring patient data
@@ -35,7 +41,10 @@ public class AlertGenerator {
      * @param patient the patient data to evaluate for alert conditions
      */
     public void evaluateData(Patient patient) {
-        // Implementation goes here
+        trackBloodPressure(patient);
+        trackBloodSaturation(patient);
+        trackHypotensiveHypoxemia(patient);
+        trackECG(patient);
     }
 
     /**
@@ -47,6 +56,34 @@ public class AlertGenerator {
      * @param alert the alert object containing details about the alert condition
      */
     private void triggerAlert(Alert alert) {
-        // Implementation might involve logging the alert or notifying staff
+        if (alert !=null){
+            System.out.println("Alert at " +alert.getTimestamp()+" : Patient "+ alert.getPatientId()+", Condition :" + alert.getCondition());
+        }
     }
+
+    private void trackBloodPressure(Patient patient){
+        BloodPressureTracker bloodPressureTracker = new BloodPressureTracker(patient);
+        triggerAlert(bloodPressureTracker.systolicChange());
+        triggerAlert(bloodPressureTracker.diastolicChange());
+        triggerAlert(bloodPressureTracker.checkSystolicThresholds());
+        triggerAlert(bloodPressureTracker.checkDiastolicThresholds());
+
+    }
+
+    private void trackBloodSaturation(Patient patient){
+        BloodSaturationTracker saturationTracker = new BloodSaturationTracker(patient);
+        triggerAlert(saturationTracker.checkLowSaturation());
+        triggerAlert(saturationTracker.checkRapidDrop());
+    }
+
+    private void trackHypotensiveHypoxemia(Patient patient){
+        HypotensiveHypoxemiaTracker tracker = new HypotensiveHypoxemiaTracker(patient);
+        triggerAlert(tracker.checkHypotensiveHypoxemia());
+    }
+
+    private void trackECG(Patient patient){
+        ECGTracker tracker= new ECGTracker(patient);
+        triggerAlert(tracker.checkAbnormalECG());
+    }
+
 }
