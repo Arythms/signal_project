@@ -61,8 +61,6 @@ public class Patient {
         return wantedRecords;
     }
 
-
-
     public int getPatientId() {
         return this.patientId;
     }

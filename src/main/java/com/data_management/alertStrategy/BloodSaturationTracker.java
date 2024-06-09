@@ -1,4 +1,4 @@
-package com.data_management.trackers;
+package com.data_management.alertStrategy;
 
 import com.alerts.Alert;
 import com.data_management.Patient;
@@ -7,8 +7,19 @@ import com.data_management.PatientRecord;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BloodSaturationTracker {
+/**
+ * Class that is encharged of tracking and Checking a Patient's Blood Saturation
+ */
+public class BloodSaturationTracker implements AlertStrategy {
     private Patient patient;
+
+    @Override
+    public Alert checkAlert() {
+        if (checkLowSaturation() != null) return checkLowSaturation();
+        if(checkRapidDrop()!=null) return checkRapidDrop();
+        return null;
+    }
+
     private List<PatientRecord> bloodSaturationRecord;
     private List<PatientRecord> patientRecord;
 
@@ -19,8 +30,8 @@ public class BloodSaturationTracker {
     }
 
     /**
-     * Retrieves a list of PatientRecord objects for this patient that are of type "OxygenSaturation"
-     * @return a list of PatientRecord objects of type "OxygenSaturation"
+     * Retrieves a list of PatientRecords that record the patient's blood saturation
+     * @return a list of PatientRecord objects of type "Saturation"
      */
     public List<PatientRecord> getOxygenSaturationRecords() {
         List<PatientRecord> oxygenSaturationRecords = new ArrayList<>();
@@ -33,7 +44,7 @@ public class BloodSaturationTracker {
     }
 
     /**
-     * Checks if blood saturation in any record drops below 92 and returns an alert if the condition is met.
+     * Checks if blood saturation in any record drops below 92 (threshold indicated) and returns an alert if the condition is met.
      * @return an Alert if the condition is met, null otherwise
      */
     public Alert checkLowSaturation() {
@@ -46,8 +57,8 @@ public class BloodSaturationTracker {
     }
 
     /**
-     * Checks if blood saturation drops 5% or more within a 10-minute interval and returns an alert if the condition is met.
-     * @return an Alert if the condition is met, null otherwise
+     * Checks if blood saturation drops 5% or more within a 10-minute interval
+     * @return an Alert if needed.
      */
     public Alert checkRapidDrop() {
         long interval = 600000;

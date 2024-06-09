@@ -28,18 +28,31 @@ import java.util.ArrayList;
  * This class is responsible for putting together  all the generators of data for patients and scheduling the tasks for each patient
  */
 public class HealthDataSimulator {
-
+    private static HealthDataSimulator instance;
     private static int patientCount = 50; // Default number of patients
     private static ScheduledExecutorService scheduler;
     private static OutputStrategy outputStrategy = new ConsoleOutputStrategy(); // Default output strategy
     private static final Random random = new Random();
 
+    private HealthDataSimulator() {}// Initialize health data simulator
+
     /**
-     * Main method to start the  simulation it creates a new scheduler, list of patient ids and schedules the task of the ids generated  with the number of patients being simulated.
-     *
-     * @param args Command line arguments for setting up the Health data simulation.
-     * @throws IOException If an I/O error occurs.
+     * Implent Singleton method.
+     * @return
      */
+    public static synchronized HealthDataSimulator getInstance() {
+        if (instance == null) {
+            instance = new HealthDataSimulator();
+        }
+        return instance;
+    }
+
+        /**
+         * Main method to start the  simulation it creates a new scheduler, list of patient ids and schedules the task of the ids generated  with the number of patients being simulated.
+         *
+         * @param args Command line arguments for setting up the Health data simulation.
+         * @throws IOException If an I/O error occurs.
+         */
 
     public static void main(String[] args) throws IOException {
 

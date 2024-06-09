@@ -1,4 +1,4 @@
-package com.data_management.trackers;
+package com.data_management.alertStrategy;
 
 import com.alerts.Alert;
 import com.data_management.Patient;
@@ -7,7 +7,7 @@ import com.data_management.PatientRecord;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HypotensiveHypoxemiaTracker {
+public class HypotensiveHypoxemiaTracker implements AlertStrategy{
     private Patient patient;
     private List<PatientRecord> systolicPressureRecords;
     private List<PatientRecord> saturationRecords;
@@ -19,7 +19,7 @@ public class HypotensiveHypoxemiaTracker {
     }
 
     /**
-     * Retrieves a list of PatientRecord objects for this patient that are of type "SystolicPressure".
+     * Retrieves a list of the patient's records that record the systolic pressure
      * @return a list of PatientRecord objects of type "SystolicPressure"
      */
     private List<PatientRecord> getSystolicPressureRecords() {
@@ -33,7 +33,7 @@ public class HypotensiveHypoxemiaTracker {
     }
 
     /**
-     * Retrieves a list of PatientRecord objects for this patient that are of type "Saturation".
+     * Retrieves a list of the patient's records that record the blood saturation
      * @return a list of PatientRecord objects of type "Saturation"
      */
     private List<PatientRecord> getSaturationRecords() {
@@ -63,4 +63,9 @@ public class HypotensiveHypoxemiaTracker {
         return null ;
     }
 
+    @Override
+    public Alert checkAlert() {
+        if(checkHypotensiveHypoxemia()!=null)return checkHypotensiveHypoxemia();
+        return null;
+    }
 }

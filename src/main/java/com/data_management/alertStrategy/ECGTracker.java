@@ -1,4 +1,4 @@
-package com.data_management.trackers;
+package com.data_management.alertStrategy;
 
 import com.alerts.Alert;
 import com.data_management.Patient;
@@ -7,7 +7,7 @@ import com.data_management.PatientRecord;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ECGTracker {
+public class ECGTracker implements AlertStrategy{
     private Patient patient;
     private List<PatientRecord> ecgRecords;
 
@@ -17,8 +17,7 @@ public class ECGTracker {
     }
 
     /**
-     * Retrieves a list of PatientRecord objects for this patient that are of type "ECG".
-     *
+     * Retrieves a list of the records of Patient that record ECG readings
      * @return a list of PatientRecord objects of type "ECG"
      */
     private List<PatientRecord> getECGRecords() {
@@ -33,7 +32,6 @@ public class ECGTracker {
 
     /**
      * Checks for alerts based on abnormal ECG readings.
-     *
      * @return an Alert if the conditions are met
      */
     public Alert checkAbnormalECG() {
@@ -44,6 +42,12 @@ public class ECGTracker {
                 return alert;
             }
         }
+        return null;
+    }
+
+    @Override
+    public Alert checkAlert() {
+        if(checkAbnormalECG()!=null) return checkAbnormalECG();
         return null;
     }
 }

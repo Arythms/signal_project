@@ -17,7 +17,12 @@ public class FileDataReader  {
         this.outputDir = outputDir;
     }
 
-    // Method to read data from the specified directory and store it in the dataStorage
+    /**
+     * Method to read data from the specified directory and store it in the dataStorage
+     * @param dataStorage where data will be logged to
+     * @throws IOException
+     */
+
 
     public void readData(DataStorage dataStorage) throws IOException {
         // Create a File object for the directory

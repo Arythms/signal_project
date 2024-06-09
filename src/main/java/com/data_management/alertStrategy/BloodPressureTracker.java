@@ -1,30 +1,32 @@
-package com.data_management.trackers;
+package com.data_management.alertStrategy;
 
 import com.alerts.Alert;
-import com.alerts.AlertGenerator;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BloodPressureTracker {
+/**
+ * Centralized Class that is encharged of tracking the Blood Pressure of a Patient.
+ * It calls alert when there is a condition.
+ */
+
+public class BloodPressureTracker implements AlertStrategy {
     private Patient patient;
     private List<PatientRecord> systolicRecord;
     private List<PatientRecord> diastolicRecord;
     private List<PatientRecord> patientRecord;
-    private List<Alert> alerts;
     public BloodPressureTracker(Patient patient) {
         this.patient = patient;
         this.patientRecord = patient.getPatientRecords();
         this.systolicRecord = getSystolicBloodPressureRecords();
         this.diastolicRecord =getDiastolicBloodPressureRecords();
-        List<Alert> alerts1 = new ArrayList<>();
-        this.alerts = alerts1;
+
     }
 
     /**
-     * Retrieves a list of PatientRecord objects for this patient that are of type "SystolicPressure"
+     * Retrieves a list of PatientRecords that track systolic blood pressure.
      * @return a list of PatientRecord objects of type "SystolicPressure"
      */
     public List<PatientRecord> getSystolicBloodPressureRecords() {
@@ -38,7 +40,7 @@ public class BloodPressureTracker {
     }
 
     /**
-     * Retrieves a list of PatientRecord objects for this patient that are of type "DiastolicPressure".
+     * Retrieves a list of PatientRecord that record the Diastolic Blood Pressure.
      * @return a list of PatientRecord objects of type "DiastolicPressure"
      */
     public List<PatientRecord> getDiastolicBloodPressureRecords() {
@@ -53,7 +55,7 @@ public class BloodPressureTracker {
 
     /**
      * Checks if the systolic blood pressure is changing
-     * @return an Alert if needed
+     * @return a personalized Alert (if needed) that indicates if its decreasing or increasing
      */
     public Alert systolicChange() {
         if (systolicRecord.size() >= 3) {
@@ -77,8 +79,8 @@ public class BloodPressureTracker {
     }
 
     /**
-     * Checks if the diastolic blood pressure is consistently decreasing.
-     * @return an Alert if needed
+     * Checks if the diastolic blood pressure is changing
+     * @return a costumized Alert ( if needed) that explains if it's increasing or decreasing
      */
     public Alert diastolicChange() {
         if (diastolicRecord.size() >= 3) {
@@ -102,6 +104,12 @@ public class BloodPressureTracker {
         return null;
     }
 
+    /**
+     * Checks that the systolic pressure is within normal values
+     * @return a personalized Alert (if needed) that indicates if the systolic pressure
+     * has gone out of normal parameters.
+     */
+
         public Alert checkSystolicThresholds () {
             for (PatientRecord record : systolicRecord) {
                 if (record.getMeasurementValue() >= 180) {
@@ -114,6 +122,12 @@ public class BloodPressureTracker {
             return null;
         }
 
+    /**
+     * Checks that the diastolic pressure is within normal values
+     * @return a personalized Alert (if needed) that indicates if the diastolic pressure
+     * has gone out of normal parameters.
+     */
+
         public Alert checkDiastolicThresholds () {
             for (PatientRecord record : diastolicRecord) {
                 if (record.getMeasurementValue() >= 120) {
@@ -125,7 +139,16 @@ public class BloodPressureTracker {
             }
             return null;
         }
+
+    @Override
+    public Alert checkAlert() {
+        if (systolicChange() != null) return systolicChange();
+        if (diastolicChange() != null) return diastolicChange();
+        if (checkSystolicThresholds() != null) return checkSystolicThresholds();
+        if (checkDiastolicThresholds()!=null) return checkDiastolicThresholds();
+        return null;
     }
+}
 
 
 

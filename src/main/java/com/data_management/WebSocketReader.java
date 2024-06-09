@@ -15,6 +15,12 @@ public class WebSocketReader implements DataReader {
 
     }
 
+    /**
+     * Conects the reacer to a Websocket
+     * @param serverAddress String indicating the adress of the Websocket input
+     * @throws IOException if the address is not valid
+     */
+
     @Override
     public void connectToWebSocketServer(String serverAddress) throws IOException {
         try {
@@ -33,6 +39,10 @@ public class WebSocketReader implements DataReader {
         //handled by WebClientDS class
     }
 
+    /**
+     * Disconnects
+     */
+
     @Override
     public void disconnect() {
         if (client != null && client.isOpen()) {
@@ -41,15 +51,18 @@ public class WebSocketReader implements DataReader {
     }
 
 
-
+        /**
+         * Class to test manually the outputs
         public static void main(String[] args) throws IOException, URISyntaxException {
             String invalidAddress = "WWWW";
             String valid ="ws://localhost:8080";
             WebSocketOutputStrategy server = new WebSocketOutputStrategy(8080);
-            WebSocketReader webSocket = new WebSocketReader(new DataStorage());
+            DataStorage dataStorage = DataStorage.getInstance();
+            WebSocketReader webSocket = new WebSocketReader(dataStorage);
             webSocket.connectToWebSocketServer(valid);
 
         }
+         */
 
 
 }

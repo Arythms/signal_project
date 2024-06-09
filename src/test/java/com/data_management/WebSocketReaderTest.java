@@ -16,15 +16,16 @@ class WebSocketReaderTest {
     void connectToValidAddress() throws IOException, URISyntaxException {
         String address = "ws://localhost:8080";
         WebSocketOutputStrategy server = new WebSocketOutputStrategy(8080);
-        WebSocketReader webSocket = new WebSocketReader(new DataStorage());
-        WebSocketClientDS client = new WebSocketClientDS(new URI(address), new DataStorage());
+        DataStorage dataStorage = DataStorage.getInstance();
+        WebSocketReader webSocket = new WebSocketReader(dataStorage);
+        WebSocketClientDS client = new WebSocketClientDS(new URI(address), dataStorage);
         webSocket.connectToWebSocketServer(address);
     }
 
     @Test
     void connectToInvalidAddress() {
         String invalidAddress = "notValid!";
-        WebSocketReader webSocket = new WebSocketReader(new DataStorage());
+        WebSocketReader webSocket = new WebSocketReader(DataStorage.getInstance());
         // Use assertThrows to verify that URISyntaxException is thrown when connecting to an invalid address
         assertThrows(IOException.class, () -> {
             webSocket.connectToWebSocketServer(invalidAddress);
