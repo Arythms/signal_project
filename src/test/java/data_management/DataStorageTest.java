@@ -23,8 +23,8 @@ class DataStorageTest {
         assertEquals(2, records.size()); // Check if two records are retrieved
         assertEquals(100.0, records.get(0).getMeasurementValue()); // Validate first record
     }
-    @Test
 
+    @Test
     void testDiastolicIncreasing() {
         DataStorage storage = new DataStorage();
        storage.addPatientData(1, 85.0, "DiastolicPressure", 1627842123000L);
@@ -104,24 +104,24 @@ class DataStorageTest {
     @Test
     void testDiastolicPressurePeak() {
         DataStorage storage = new DataStorage();
-        storage.addPatientData(7, 70.0, "DiastolicPressure", 1627842123000L);
-        storage.addPatientData(7, 55.0, "DiastolicPressure", 1627842723000L);
+        storage.addPatientData(7, 55.0, "DiastolicPressure", 1627842123000L);
+        storage.addPatientData(7, 70.0, "DiastolicPressure", 1627842723000L);
 
         List<PatientRecord> records = storage.getRecords(7, 1627842123000L, 1627842723000L);
         assertEquals(2, records.size());
-        assertEquals(70.0, records.get(0).getMeasurementValue());
-        assertEquals(55.0, records.get(1).getMeasurementValue());
+        assertEquals(55.0, records.get(0).getMeasurementValue());
+        assertEquals(70.0, records.get(1).getMeasurementValue());
     }
     @Test
     void testDiastolicPressureDrop() {
         DataStorage storage = new DataStorage();
-        storage.addPatientData(8, 100.0, "DiastolicPressure", 1627842123000L);
-        storage.addPatientData(8, 130.0, "DiastolicPressure", 1627842723000L);
+        storage.addPatientData(8, 130.0, "DiastolicPressure", 1627842123000L);
+        storage.addPatientData(8, 100.0, "DiastolicPressure", 1627842723000L);
 
         List<PatientRecord> records = storage.getRecords(8, 1627842123000L, 1627842723000L);
         assertEquals(2, records.size());
-        assertEquals(100.0, records.get(0).getMeasurementValue());
-        assertEquals(130.0, records.get(1).getMeasurementValue());
+        assertEquals(130.0, records.get(0).getMeasurementValue());
+        assertEquals(100.0, records.get(1).getMeasurementValue());
     }
 @Test
     void testBloodSaturationDrop() {

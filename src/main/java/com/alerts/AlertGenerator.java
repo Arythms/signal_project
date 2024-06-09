@@ -17,6 +17,7 @@ import java.util.List;
  */
 public class AlertGenerator {
     private DataStorage dataStorage;
+    public boolean alertTriggered;
 
     /**
      * Constructs an {@code AlertGenerator} with a specified {@code DataStorage}.
@@ -28,6 +29,7 @@ public class AlertGenerator {
      */
     public AlertGenerator(DataStorage dataStorage) {
         this.dataStorage = dataStorage;
+        this.alertTriggered = false;
     }
 
     /**
@@ -57,9 +59,22 @@ public class AlertGenerator {
      */
     private void triggerAlert(Alert alert) {
         if (alert !=null){
-            System.out.println("Alert at " +alert.getTimestamp()+" : Patient "+ alert.getPatientId()+", Condition :" + alert.getCondition());
+            System.out.println("Alert at " +alert.getTimestamp()+" : Patient "+ alert.getPatientId()+", Condition : " + alert.getCondition());
+            alertTriggered = true;
         }
     }
+
+    public boolean isAlertTriggered() {
+        return alertTriggered; // Return the flag value
+    }
+
+    /**
+     * Not implemented but used for when alerts are resolved
+     */
+    public void alertsResolved(){
+        alertTriggered= false;
+    }
+
 
     private void trackBloodPressure(Patient patient){
         BloodPressureTracker bloodPressureTracker = new BloodPressureTracker(patient);
@@ -84,6 +99,23 @@ public class AlertGenerator {
     private void trackECG(Patient patient){
         ECGTracker tracker= new ECGTracker(patient);
         triggerAlert(tracker.checkAbnormalECG());
+    }
+
+    public static void main(String args[]){
+        DataStorage storage = new DataStorage();
+        storage.addPatientData(4, 130.0, "SystolicPressure", 1627842123000L);
+        storage.addPatientData(4, 125.0, "SystolicPressure", 1627842723000L);
+        storage.addPatientData(4, 110.0, "SystolicPressure", 1627843323000L);
+        storage.addPatientData(6, 170.0, "SystolicPressure", 1627842123000L);
+        storage.addPatientData(6, 190.0, "SystolicPressure", 1627842723000L);
+        storage.addPatientData(10, 55.0, "ECG", 1627842123000L);
+        storage.addPatientData(10, 105.0, "ECG", 1627842723000L);
+        storage.addPatientData(10, 60.0, "ECG", 1627843323000L);
+
+        AlertGenerator alert = new AlertGenerator(storage);
+        Patient tested = storage.getPatient(10);
+        alert.evaluateData(tested);
+
     }
 
 }

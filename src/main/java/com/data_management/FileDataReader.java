@@ -9,7 +9,7 @@ import java.io.IOException;
  * Week 4: Implementation of Data Reader Interface
  * Given a directory assumed to be a cvs file, the class will store the data
  */
-public class FileDataReader implements DataReader {
+public class FileDataReader  {
     private String outputDir; // Directory where the data files are located
 
     // Constructor to initialize the output directory
@@ -18,7 +18,7 @@ public class FileDataReader implements DataReader {
     }
 
     // Method to read data from the specified directory and store it in the dataStorage
-    @Override
+
     public void readData(DataStorage dataStorage) throws IOException {
         // Create a File object for the directory
         File directory = new File(outputDir);

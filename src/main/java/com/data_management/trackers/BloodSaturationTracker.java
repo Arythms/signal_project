@@ -73,7 +73,7 @@ public class BloodSaturationTracker {
                 double max = tempList.stream().mapToDouble(PatientRecord::getMeasurementValue).max().orElse(Double.NEGATIVE_INFINITY);
 
                 if ((max - min) >= 5) {
-                    return new Alert(Integer.toString(patient.getPatientId()), "Saturation Drops Rapidly", intervalStart);
+                    return new Alert(Integer.toString(patient.getPatientId()), "Blood Saturation Drops Rapidly", intervalStart);
                 }
             }
         }

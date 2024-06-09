@@ -1,6 +1,7 @@
 package com.data_management.trackers;
 
 import com.alerts.Alert;
+import com.alerts.AlertGenerator;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
 
@@ -12,12 +13,14 @@ public class BloodPressureTracker {
     private List<PatientRecord> systolicRecord;
     private List<PatientRecord> diastolicRecord;
     private List<PatientRecord> patientRecord;
-
+    private List<Alert> alerts;
     public BloodPressureTracker(Patient patient) {
         this.patient = patient;
         this.patientRecord = patient.getPatientRecords();
         this.systolicRecord = getSystolicBloodPressureRecords();
         this.diastolicRecord =getDiastolicBloodPressureRecords();
+        List<Alert> alerts1 = new ArrayList<>();
+        this.alerts = alerts1;
     }
 
     /**
@@ -55,9 +58,17 @@ public class BloodPressureTracker {
     public Alert systolicChange() {
         if (systolicRecord.size() >= 3) {
             for (int i = 0; i < systolicRecord.size() - 2; i++) {
-                if ((Math.abs(systolicRecord.get(i).getMeasurementValue() - systolicRecord.get(i + 1).getMeasurementValue())) > 10) {
+                double currentValue = systolicRecord.get(i + 1).getMeasurementValue();
+                double previousValue = systolicRecord.get(i).getMeasurementValue();
+                double nextValue = systolicRecord.get(i + 2).getMeasurementValue();
+
+                // Check if systolic blood pressure is increasing
+                if (currentValue > previousValue && nextValue > currentValue && (nextValue - previousValue) > 10) {
                     return new Alert(Integer.toString(patient.getPatientId()), "Systolic Blood Pressure is Increasing", systolicRecord.get(i + 2).getTimestamp());
-                } else if ((Math.abs(systolicRecord.get(i + 1).getMeasurementValue() - systolicRecord.get(i + 2).getMeasurementValue()) > 10)){
+                }
+
+                // Check if systolic blood pressure is decreasing
+                if (currentValue < previousValue && nextValue < currentValue && (previousValue - nextValue) > 10) {
                     return new Alert(Integer.toString(patient.getPatientId()), "Systolic Blood Pressure is Decreasing", systolicRecord.get(i + 2).getTimestamp());
                 }
             }
@@ -72,37 +83,51 @@ public class BloodPressureTracker {
     public Alert diastolicChange() {
         if (diastolicRecord.size() >= 3) {
             for (int i = 0; i < diastolicRecord.size() - 2; i++) {
-                if ((Math.abs(diastolicRecord.get(i).getMeasurementValue() - diastolicRecord.get(i + 1).getMeasurementValue())) > 10) {
+                double currentValue = diastolicRecord.get(i + 1).getMeasurementValue();
+                double previousValue = diastolicRecord.get(i).getMeasurementValue();
+                double nextValue = diastolicRecord.get(i + 2).getMeasurementValue();
+
+                // Check if diastolic blood pressure is increasing
+                if (currentValue > previousValue && nextValue > currentValue && (nextValue - previousValue) > 10) {
                     return new Alert(Integer.toString(patient.getPatientId()), "Diastolic Blood Pressure is Increasing", diastolicRecord.get(i + 2).getTimestamp());
-                } else if ((Math.abs(diastolicRecord.get(i + 1).getMeasurementValue() - diastolicRecord.get(i + 2).getMeasurementValue()) > 10)){
-                    return new Alert(Integer.toString(patient.getPatientId()), "Systolic Blood Pressure is Decreasing", diastolicRecord.get(i + 2).getTimestamp());
+                }
+
+                // Check if diastolic blood pressure is decreasing
+                if (currentValue < previousValue && nextValue < currentValue && (previousValue - nextValue) > 10) {
+                    return new Alert(Integer.toString(patient.getPatientId()), "Diastolic Blood Pressure is Decreasing", diastolicRecord.get(i + 2).getTimestamp());
                 }
             }
+
         }
         return null;
     }
 
-    public Alert checkSystolicThresholds() {
-        for (PatientRecord record : systolicRecord) {
-            if (record.getMeasurementValue() > 180) {
-                return new Alert(Integer.toString(patient.getPatientId()), "Systolic Pressure Exceeds 180", record.getTimestamp());
+        public Alert checkSystolicThresholds () {
+            for (PatientRecord record : systolicRecord) {
+                if (record.getMeasurementValue() >= 180) {
+                    return new Alert(Integer.toString(patient.getPatientId()), "Systolic Pressure Exceeds 180", record.getTimestamp());
+                }
+                if (record.getMeasurementValue() <= 90) {
+                    return new Alert(Integer.toString(patient.getPatientId()), "Systolic Pressure Drops Below 90", record.getTimestamp());
+                }
             }
-            if (record.getMeasurementValue() < 90) {
-                return new Alert(Integer.toString(patient.getPatientId()), "Systolic Pressure Drops Below 90", record.getTimestamp());
-            }
+            return null;
         }
-        return null;
-    }
-    public Alert checkDiastolicThresholds() {
-        for (PatientRecord record : diastolicRecord) {
-            if (record.getMeasurementValue() > 120) {
-                return new Alert(Integer.toString(patient.getPatientId()), "Diastolic Pressure Exceeds 120", record.getTimestamp());
+
+        public Alert checkDiastolicThresholds () {
+            for (PatientRecord record : diastolicRecord) {
+                if (record.getMeasurementValue() >= 120) {
+                    return new Alert(Integer.toString(patient.getPatientId()), "Diastolic Pressure Exceeds 120", record.getTimestamp());
+                }
+                if (record.getMeasurementValue() <= 60) {
+                    return new Alert(Integer.toString(patient.getPatientId()), "Diastolic Pressure Drops Below 60", record.getTimestamp());
+                }
             }
-            if (record.getMeasurementValue() < 60) {
-                return new Alert(Integer.toString(patient.getPatientId()), "Diastolic Pressure Drops Below 60", record.getTimestamp());
-            }
+            return null;
         }
-        return null;
     }
 
-}
+
+
+
+
